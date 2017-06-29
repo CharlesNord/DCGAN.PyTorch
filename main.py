@@ -39,7 +39,7 @@ def train(config):
         loss = loss.cuda()
     z_g = Variable(z_g)
     z_f = Variable(z_f, volatile=True)
-    z_f.data.uniform(0, 1)
+    z_f.data.normal_(0.0, 1.0)
     real = Variable(real)
 
     # optimizer
@@ -58,8 +58,8 @@ def train(config):
         net_g.zero_grad()
         net_d.zero_grad()
         real.data.resize(image.size()).copy_(image)
-        z_d.data.uniform(0.0, 1.0)
-        z_g.data.uniform(0.0, 1.0)
+        z_d.data.normal_(0.0, 1.0)
+        z_g.data.normal_(0.0, 1.0)
 
         fake = net_g(z)
         fake_d = net_d(fake)
