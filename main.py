@@ -27,7 +27,7 @@ def train(config):
     real = torch.FloatTensor(config.batch_size, 3, config.image_size, config.image_size)
 
     # criterion
-    loss = torch.nn.NLLLoss()
+    loss = torch.nn.BCELoss()
 
     # variable
     if config.use_cuda:
@@ -54,23 +54,24 @@ def train(config):
         except:
             loader = iter(data_loader)
             image = next(loader)
-
-        net_g.zero_grad()
+        # update net d
         net_d.zero_grad()
         real.data.resize(image.size()).copy_(image)
         z_d.data.normal_(0.0, 1.0)
         z_g.data.normal_(0.0, 1.0)
 
-        fake = net_g(z)
-        fake_d = net_d(fake)
+        fake = net_g(z_g)
+        fake_d = net_d(fake.detach())
         real_d = net_d(real)
-        cost_g = loss(fake_d, Variable(config.batch_size).one_())
         cost_d = loss(real_d, Variable(config.batch_size).one_()) + loss(fake_d, Variable(config.batch_size).zero_())
         cost_d.backward()
         cost_d.step()
 
+        # update net g
         net_g.zero_grad()
         net_d.zero_grad()
+        fake_g = net_d(fake)
+        cost_g = loss(fake_d, Variable(config.batch_size).one_())
         cost_g.backward()
         cost_g.step()
 
