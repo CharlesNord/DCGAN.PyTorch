@@ -7,6 +7,7 @@ import numpy as np
 from io import BytesIO
 import scipy.misc
 import tensorflow as tf
+import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
@@ -19,6 +20,7 @@ def get_loader(config):
     dataset = ImageFolder(
         root=root,
         transform=transforms.Compose([
+            transforms.CenterCrop(160),
             transforms.Scale(size=config.image_size),
             transforms.ToTensor(),
         ])
@@ -49,6 +51,17 @@ def save_model(net, path):
     """ save model
     """
     torch.save(net.state_dict(), path)
+
+def save_image(tensor, filename, nrow=8, padding=2,
+               normalize=False, range=None, scale_each=False):
+    from PIL import Image
+    tensor = tensor.cpu()
+    grid = torchvision.utils.make_grid(tensor, nrow=nrow, padding=padding,
+                            normalize=normalize, range=range, scale_each=True)
+
+    ndarr = grid.mul(255).clamp(0, 255).byte().permute(1, 2, 0).numpy()
+    im = Image.fromarray(ndarr)
+    im.save(filename)
 
 def make_summary(writer, key, value, step):
     if hasattr(value, '__len__'):
