@@ -7,4 +7,4 @@ An PyTorch implementation of  [Deep Convolutional Generative Adversarial Network
 Generator
 ---
 
-![](images/80k.png)
+![](data/80k.png)
