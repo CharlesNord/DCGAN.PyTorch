@@ -26,3 +26,6 @@ def get_loader(config):
         num_workers=config.num_workers
     )
     return loader
+
+def denorm(x):
+    return x * 0.5 + 0.5

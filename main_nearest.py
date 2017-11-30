@@ -8,21 +8,21 @@ from torch.autograd import Variable
 from torch.optim import Adam
 from torchvision.utils import save_image
 
-from loader import get_loader
+from loader import get_loader, denorm
 from models.model import NetD, NetG
 
 parser = argparse.ArgumentParser(description='DCGAN')
 parser.add_argument('--dataset', type=str, default='../data/celeba/img_align_celeba')
 parser.add_argument('--image_size', type=int, default=128)
 parser.add_argument('--batch_size', type=int, default=32)
-parser.add_argument('--num_workers', type=int, default=10)
+parser.add_argument('--num_workers', type=int, default=8)
 parser.add_argument('--z_num', type=int, default=64)
 parser.add_argument('--n_num', type=int, default=64)
 parser.add_argument('--start_epoch', type=int, default=1)
 parser.add_argument('--final_epoch', type=int, default=100)
 parser.add_argument('--load_epoch', type=int, default=0)
-parser.add_argument('--image_path', type=str, default='images')
-parser.add_argument('--model_path', type=str, default='chkpts')
+parser.add_argument('--image_path', type=str, default='images_n')
+parser.add_argument('--model_path', type=str, default='chkpts_n')
 parser.add_argument('--load_path', type=str, default=None)
 parser.add_argument('--up_mode', type=str, default='nearest')
 parser.add_argument('--norm_mode', type=str, default='instance')
@@ -79,8 +79,8 @@ def train(epoch):
     fake_fixed = net_g(fixed)
     torch.save(net_g.state_dict(), '{0}/G_{1}.pth'.format(config.model_path, epoch))
     torch.save(net_d.state_dict(), '{0}/D_{1}.pth'.format(config.model_path, epoch))
-    save_image(fake_fixed.data, '{0}/fixed_{1}.png'.format(config.image_path, epoch))
-    save_image(fake.data, '{0}/fake_{1}.png'.format(config.image_path, epoch))
+    save_image(denorm(fake_fixed).data, '{0}/fixed_{1}.png'.format(config.image_path, epoch))
+    save_image(denorm(fake).data, '{0}/fake_{1}.png'.format(config.image_path, epoch))
 
 
 if __name__ == '__main__':

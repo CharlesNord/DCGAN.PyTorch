@@ -9,7 +9,7 @@ from torch.autograd import Variable
 from torch.optim import Adam
 from torchvision.utils import save_image
 
-from loader import get_loader
+from loader import get_loader, denorm
 from models.model import NetD, NetG
 
 parser = argparse.ArgumentParser(description='DCGAN')
@@ -22,9 +22,8 @@ parser.add_argument('--n_num', type=int, default=64)
 parser.add_argument('--start_epoch', type=int, default=1)
 parser.add_argument('--final_epoch', type=int, default=100)
 parser.add_argument('--load_epoch', type=int, default=0)
-parser.add_argument('--log_path', type=str, default='logdir')
-parser.add_argument('--image_path', type=str, default='images')
-parser.add_argument('--model_path', type=str, default='chkpts')
+parser.add_argument('--image_path', type=str, default='images_b')
+parser.add_argument('--model_path', type=str, default='chkpts_b')
 parser.add_argument('--load_path', type=str, default=None)
 parser.add_argument('--up_mode', type=str, default='blinear')
 parser.add_argument('--norm_mode', type=str, default='instance')
@@ -33,7 +32,7 @@ config = parser.parse_args()
 # manual seed
 torch.cuda.manual_seed(1502)
 # data_loader
-data_loader = get_loader(config)
+loader = get_loader(config)
 # network
 net_g = NetG(config).cuda()
 net_d = NetD(config).cuda()
@@ -52,7 +51,7 @@ fixed.data.normal_(0.0, 1.0)
 def train(epoch):
     """ train """
 
-    for idx, (image, _) in enumerate(data_loader):
+    for idx, (image, _) in enumerate(loader):
 
         # update net d
         net_d.zero_grad()
@@ -82,8 +81,8 @@ def train(epoch):
     fake_fixed = net_g(fixed)
     torch.save(net_g.state_dict(), '{0}/G_{1}.pth'.format(config.model_path, epoch))
     torch.save(net_d.state_dict(), '{0}/D_{1}.pth'.format(config.model_path, epoch))
-    save_image(fake_fixed.data, '{0}/fixed_{1}.png'.format(config.image_path, epoch))
-    save_image(fake.data, '{0}/fake_{1}.png'.format(config.image_path, epoch))
+    save_image(denorm(fake_fixed).data, '{0}/fixed_{1}.png'.format(config.image_path, epoch))
+    save_image(denorm(fake).data, '{0}/fake_{1}.png'.format(config.image_path, epoch))
 
 
 
