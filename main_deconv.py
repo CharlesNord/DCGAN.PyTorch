@@ -89,7 +89,6 @@ if __name__ == '__main__':
 
     os.makedirs(config.image_path, exist_ok=True)
     os.makedirs(config.model_path, exist_ok=True)
-    os.makedirs(config.log_path, exist_ok=True)
 
     for epoch in range(config.start_epoch, config.final_epoch):
         train(epoch)
