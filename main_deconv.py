@@ -12,7 +12,7 @@ from loader import get_loader
 from models.model import NetD, NetG
 
 parser = argparse.ArgumentParser(description='DCGAN')
-parser.add_argument('--dataset', type=str, default='../AnimeFace/img_align_celeba')
+parser.add_argument('--dataset', type=str, default='../data/celeba/img_align_celeba')
 parser.add_argument('--image_size', type=int, default=128)
 parser.add_argument('--batch_size', type=int, default=32)
 parser.add_argument('--num_workers', type=int, default=12)
