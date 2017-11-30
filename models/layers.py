@@ -37,6 +37,7 @@ class Upsample(nn.Module):
             out = self.merge(out)
         else:
             print(x.size())
+            print(self.main)
             out = self.main(x)
         return out
 
