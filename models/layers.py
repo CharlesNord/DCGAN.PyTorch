@@ -10,7 +10,7 @@ class Upsample(nn.Module):
         self.mode = mode
         if mode == 'deconv':
             self.main = nn.Sequential(
-                nn.ConvTranspose2d(inplanes, planes, 4, 2, 0)
+                nn.ConvTranspose2d(inplanes, planes, 4, 2, 1)
             )
         elif mode == 'nearest':
             self.main = nn.Sequential(
@@ -26,7 +26,7 @@ class Upsample(nn.Module):
             self.main = nn.ModuleList([
                 nn.Upsample(scale_factor=2, mode='nearset'),
                 nn.Upsample(scale_factor=2, mode='blinear'),
-                nn.ConvTranspose2d(inplanes, inplanes, 4, 2, 0)
+                nn.ConvTranspose2d(inplanes, inplanes, 4, 2, 1)
             ])
             self.merge = nn.Conv2d(inplanes*3, planes, 3, 1, 1)
 
