@@ -17,15 +17,15 @@ class Upsample(nn.Module):
                 nn.Upsample(scale_factor=2, mode='nearest'),
                 nn.Conv2d(inplanes, planes, 3, 1, 1),
             )
-        elif mode == 'blinear':
+        elif mode == 'bilinear':
             self.main = nn.Sequential(
-                nn.Upsample(scale_factor=2, mode='blinear'),
+                nn.Upsample(scale_factor=2, mode='bilinear'),
                 nn.Conv2d(inplanes, planes, 3, 1, 1),
             )
         elif mode == 'mixed':
             self.main = nn.ModuleList([
                 nn.Upsample(scale_factor=2, mode='nearset'),
-                nn.Upsample(scale_factor=2, mode='blinear'),
+                nn.Upsample(scale_factor=2, mode='bilinear'),
                 nn.ConvTranspose2d(inplanes, inplanes, 4, 2, 1)
             ])
             self.merge = nn.Conv2d(inplanes*3, planes, 3, 1, 1)
@@ -36,8 +36,6 @@ class Upsample(nn.Module):
             out = torch.cat(out, dim=1)
             out = self.merge(out)
         else:
-            print(x.size())
-            print(self.main)
             out = self.main(x)
         return out
 

@@ -25,7 +25,7 @@ parser.add_argument('--load_epoch', type=int, default=0)
 parser.add_argument('--image_path', type=str, default='images_b')
 parser.add_argument('--model_path', type=str, default='chkpts_b')
 parser.add_argument('--load_path', type=str, default=None)
-parser.add_argument('--up_mode', type=str, default='blinear')
+parser.add_argument('--up_mode', type=str, default='bilinear')
 parser.add_argument('--norm_mode', type=str, default='instance')
 config = parser.parse_args()
 
