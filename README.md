@@ -7,4 +7,6 @@ An PyTorch implementation of  [Deep Convolutional Generative Adversarial Network
 Generator
 ---
 
+After 80k step:
+
 ![](data/80k.png)
