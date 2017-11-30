@@ -36,6 +36,7 @@ class Upsample(nn.Module):
             out = torch.cat(out, dim=1)
             out = self.merge(out)
         else:
+            print(x.size())
             out = self.main(x)
         return out
 
