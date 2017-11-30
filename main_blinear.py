@@ -20,9 +20,8 @@ parser.add_argument('--num_workers', type=int, default=12)
 parser.add_argument('--z_num', type=int, default=64)
 parser.add_argument('--n_num', type=int, default=64)
 parser.add_argument('--start_epoch', type=int, default=1)
-parser.add_argument('--final_epoch', type=int, default=500000)
+parser.add_argument('--final_epoch', type=int, default=100)
 parser.add_argument('--load_epoch', type=int, default=0)
-parser.add_argument('--save_epoch', type=int, default=1000)
 parser.add_argument('--log_path', type=str, default='logdir')
 parser.add_argument('--image_path', type=str, default='images')
 parser.add_argument('--model_path', type=str, default='chkpts')
@@ -94,5 +93,5 @@ if __name__ == '__main__':
     os.makedirs(config.model_path, exist_ok=True)
     os.makedirs(config.log_path, exist_ok=True)
 
-    for step in range(config.start_epoch, config.final_epoch):
-        train(step)
+    for epoch in range(config.start_epoch, config.final_epoch):
+        train(epoch)
